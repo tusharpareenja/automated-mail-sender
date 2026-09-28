@@ -1,0 +1,21 @@
+# One container: Redis + API + Celery worker/beat.
+#   docker compose -f docker-compose.prod.yml --env-file backend/.env up -d --build
+
+services:
+  backend:
+    build:
+      context: ./backend
+    image: mindsoft-mail-api:latest
+    container_name: mindsoft-mail
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    environment:
+      APP_ENV: production
+      COOKIE_SECURE: "true"
+      REDIS_URL: redis://127.0.0.1:6379/0
+      CELERY_BROKER_URL: redis://127.0.0.1:6379/1
+      CELERY_RESULT_BACKEND: redis://127.0.0.1:6379/2
+    ports:
+      - "8001:8001"
+    mem_limit: 1280m

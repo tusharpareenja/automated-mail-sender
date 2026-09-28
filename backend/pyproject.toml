@@ -1,0 +1,51 @@
+[project]
+name = "mail-campaign-backend"
+version = "1.0.0"
+description = "Production AI email campaign platform API"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.116.0",
+    "uvicorn[standard]>=0.35.0",
+    "sqlalchemy[asyncio]>=2.0.41",
+    "asyncpg>=0.30.0",
+    "psycopg2-binary>=2.9.10",
+    "alembic>=1.16.0",
+    "pydantic-settings>=2.10.0",
+    "email-validator>=2.2.0",
+    "argon2-cffi>=23.1.0",
+    "pyjwt>=2.10.1",
+    "cryptography>=45.0.0",
+    "redis>=6.2.0",
+    "celery[redis]>=5.5.0",
+    "httpx>=0.28.1",
+    "openai>=1.93.0",
+    "python-multipart>=0.0.20",
+    "bleach>=6.2.0",
+    "orjson>=3.10.18",
+    "websockets>=15.0.1",
+    "azure-storage-blob>=12.25.0",
+    "openpyxl>=3.1.5",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.4.0",
+    "pytest-asyncio>=1.0.0",
+    "anyio>=4.9.0",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["app*"]

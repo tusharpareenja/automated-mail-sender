@@ -24,6 +24,16 @@ def test_postgres_url_is_converted_for_async():
     assert to_sync_database_url(async_url).startswith("postgresql://")
 
 
+def test_psycopg3_style_url_uses_installed_drivers():
+    url = "postgresql+psycopg://user:pass@host/db?sslmode=require"
+    async_url, needs_ssl = to_async_database_url(url)
+    assert async_url.startswith("postgresql+asyncpg://")
+    assert needs_ssl is True
+    sync_url = to_sync_database_url(url)
+    assert sync_url.startswith("postgresql://")
+    assert "psycopg" not in sync_url.split("://")[0]
+
+
 def test_password_hash_roundtrip():
     hashed = hash_password("CorrectHorseBattery1")
     assert hashed != "CorrectHorseBattery1"

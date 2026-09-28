@@ -99,6 +99,8 @@ def to_async_database_url(url: str) -> tuple[str, bool]:
         url = "postgresql://" + url[len("postgres://") :]
     if url.startswith("postgresql+psycopg2://"):
         url = "postgresql+asyncpg://" + url[len("postgresql+psycopg2://") :]
+    elif url.startswith("postgresql+psycopg://"):
+        url = "postgresql+asyncpg://" + url[len("postgresql+psycopg://") :]
     elif url.startswith("postgresql://"):
         url = "postgresql+asyncpg://" + url[len("postgresql://") :]
     return _rewrite_asyncpg_query(url)
@@ -108,6 +110,9 @@ def to_sync_database_url(url: str) -> str:
     url = url.strip()
     url = url.replace("postgresql+asyncpg://", "postgresql://", 1)
     url = url.replace("postgresql+psycopg2://", "postgresql://", 1)
+    url = url.replace("postgresql+psycopg://", "postgresql://", 1)
+    if url.startswith("postgres://"):
+        url = "postgresql://" + url[len("postgres://") :]
     parts = urlsplit(url)
     query = dict(parse_qsl(parts.query, keep_blank_values=True))
     ssl = query.pop("ssl", None)

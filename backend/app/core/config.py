@@ -113,6 +113,9 @@ def to_sync_database_url(url: str) -> str:
     url = url.replace("postgresql+psycopg://", "postgresql://", 1)
     if url.startswith("postgres://"):
         url = "postgresql://" + url[len("postgres://") :]
+    # SQLAlchemy 2.1+ maps bare postgresql:// to psycopg v3, which is not installed.
+    if url.startswith("postgresql://"):
+        url = "postgresql+psycopg2://" + url[len("postgresql://") :]
     parts = urlsplit(url)
     query = dict(parse_qsl(parts.query, keep_blank_values=True))
     ssl = query.pop("ssl", None)
